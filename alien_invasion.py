@@ -5,7 +5,8 @@ import pygame  # Game library for graphics, input, and window management
 from settings import Settings # A class that stores all settings for one instance of an Alien Invasion object
 
 from ship import Ship
-from bullet import Bullet
+from bullet import Bullet # Allows us to draw and manipulate bullets
+from alien import Alien # Allows us to use Aliens in our game
 from duke import TheDuke
 
 class AlienInvasion:
@@ -24,6 +25,8 @@ class AlienInvasion:
         self.ship = Ship(self)
         self.duke = TheDuke(self)
         self.bullets = pygame.sprite.Group()
+        self.aliens = pygame.sprite.Group()
+        self._create_fleet()
         pygame.display.set_caption("Alien Invasion") # Puts a title on the display.
 
     def run_game(self):
@@ -81,7 +84,21 @@ class AlienInvasion:
             if bullet.rect.bottom <= 0:
                 self.bullets.remove(bullet)
                 # print(len(self.bullets))
+
+    def _create_fleet(self):
+        """Create the fleet of aliens."""
+        # Create an alien and keep addin aliens until there's no room left.
+        # Spacing between aliens is one alien width.
+        alien = Alien(self)
+        alien_width = alien.rect.width
         
+        current_x = alien_width
+        while current_x < (self.settings.screen_width - 2 * alien_width):
+            new_alien = Alien(self)
+            new_alien.x= current_x
+            new_alien.rect.x = current_x
+            self.aliens.add(new_alien)
+            current_x += 2 * alien_width  
         
     def _update_screen(self):
          """Updated images on the screen, and flip to the new screen."""
@@ -89,6 +106,7 @@ class AlienInvasion:
          for bullet in self.bullets.sprites():
              bullet.draw_bullet()
          self.ship.blitme()
+         self.aliens.draw(self.screen)
          self.duke.blitme()
          pygame.display.flip() 
 
