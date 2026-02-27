@@ -7,6 +7,7 @@ from settings import Settings # A class that stores all settings for one instanc
 from ship import Ship
 from bullet import Bullet # Allows us to draw and manipulate bullets
 from alien import Alien # Allows us to use Aliens in our game
+from star import Star
 from duke import TheDuke
 
 class AlienInvasion:
@@ -26,7 +27,9 @@ class AlienInvasion:
         self.duke = TheDuke(self)
         self.bullets = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
+        self.stars = pygame.sprite.Group()
         self._create_fleet()
+        self._starry_sky()
         pygame.display.set_caption("Alien Invasion") # Puts a title on the display.
 
     def run_game(self):
@@ -109,12 +112,34 @@ class AlienInvasion:
         new_alien.rect.y = y_position
         self.aliens.add(new_alien)
 
+    def _starry_sky(self):
+        """Fill up the sky with stars."""
+        alien_ref = Alien(self)
+        alien_width, alien_height = alien_ref.rect.size
+
+        current_x, current_y = 0, 0
+        while current_y < (self.settings.screen_height):
+            while current_x < (self.settings.screen_width):
+                self._create_star(current_x, current_y)
+                current_x += 2 * alien_width
+            # Finished a row; reset x value and incremeent y value.
+            current_x = alien_width
+            current_y += 2 * alien_height
+   
+    def _create_star(self, x_position, y_position):
+        """Create a star."""
+        new_star = Star(self)
+        new_star.rect.x = x_position
+        new_star.rect.y = y_position
+        self.stars.add(new_star)
+
     def _update_screen(self):
          """Updated images on the screen, and flip to the new screen."""
          self.screen.fill(self.settings.bg_color) # Redraw the screen during each pass through the loop
          for bullet in self.bullets.sprites():
              bullet.draw_bullet()
          self.ship.blitme()
+         self.stars.draw(self.screen)
          self.aliens.draw(self.screen)
          self.duke.blitme()
          pygame.display.flip() 
