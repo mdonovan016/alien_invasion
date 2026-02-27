@@ -10,6 +10,8 @@ from alien import Alien # Allows us to use Aliens in our game
 from star import Star
 from duke import TheDuke
 
+from random import randint
+
 class AlienInvasion:
     """Overall class to manage game assets and behavior."""
 
@@ -120,7 +122,9 @@ class AlienInvasion:
         current_x, current_y = 0, 0
         while current_y < (self.settings.screen_height):
             while current_x < (self.settings.screen_width):
-                self._create_star(current_x, current_y)
+                random_x = randint(-100, 100)
+                random_y = randint(-100, 100)
+                self._create_star((current_x + random_x), (current_y + random_y))
                 current_x += 2 * alien_width
             # Finished a row; reset x value and incremeent y value.
             current_x = alien_width
