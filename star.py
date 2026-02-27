@@ -11,7 +11,7 @@ class Star(Sprite):
 
         # Load the star image and set its rect attribute
         self.image = pygame.image.load('images/star.bmp')
-        self.image.set_alpha(100)  # 0 = invisible, 255 = fully visible
+        self.image.set_alpha(75)  # 0 = invisible, 255 = fully visible
         self.rect = self.image.get_rect()
 
         # Start each new star near the top left of the screen.
