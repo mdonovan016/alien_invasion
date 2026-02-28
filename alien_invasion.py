@@ -75,6 +75,7 @@ class AlienInvasion:
         if len(self.bullets) < self.settings.bullets_allowed:
             new_bullet = Bullet(self)
             self.bullets.add(new_bullet)
+            self.sound.stop()
             self.sound.play()
 
     def _check_bullet_alien_collisions(self):
