@@ -12,8 +12,6 @@ class Bullet(Sprite):
         
         self.image = pygame.image.load('images/ball_of_steel.bmp')
         self.rect = self.image.get_rect()
-        # Create a bullet rect at (0,0) and then set correct position.
-        self.rect = pygame.Rect(0, 0, self.settings.bullet_width, self.settings.bullet_height)
         self.rect.midright = ai_game.ship.rect.midright
         
         # Store the bullet's position as a float.
