@@ -7,6 +7,7 @@ from settings import Settings # A class that stores all settings for one instanc
 from ship import Ship
 from bullet import Bullet # Allows us to draw and manipulate bullets
 from alien import Alien # Allows us to use Aliens in our game
+from raindrop import Raindrop
 from duke import TheDuke
 
 class AlienInvasion:
@@ -25,8 +26,10 @@ class AlienInvasion:
         self.ship = Ship(self)
         # self.duke = TheDuke(self)
         self.bullets = pygame.sprite.Group()
+        self.raindrops = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
         self._create_fleet()
+        self._create_raindrops()  
         pygame.display.set_caption("Alien Invasion") # Puts a title on the display.
 
     def run_game(self):
@@ -128,12 +131,31 @@ class AlienInvasion:
         self._check_fleet_edges()
         self.aliens.update()
     
+    def _create_raindrop(self, x_position, y_position):
+        """Create a raindrop and place it in the row."""
+        new_raindrop = Raindrop(self)
+        new_raindrop.rect.x = x_position
+        new_raindrop.rect.y = y_position
+        self.raindrops.add(new_raindrop)
+    
+    def _create_raindrops(self):
+        """Create a grid of raindrops."""
+        # Create a raindrop and keep adding raindrops until there's no room left.
+        # Raindrops are spaced in between the aliens
+        alien = Alien(self)
+        alien_width, alien_height = alien.rect.size
+
+        for alien in self.aliens:
+            self._create_raindrop((alien.x + alien.rect.width), alien.rect.y)
+
+
     def _update_screen(self):
          """Updated images on the screen, and flip to the new screen."""
          self.screen.fill(self.settings.bg_color) # Redraw the screen during each pass through the loop
          for bullet in self.bullets.sprites():
              bullet.draw_bullet()
          self.ship.blitme()
+         self.raindrops.draw(self.screen)
          self.aliens.draw(self.screen)
          #self.duke.blitme()
          pygame.display.flip() 
