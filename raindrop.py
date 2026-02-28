@@ -19,3 +19,6 @@ class Raindrop(Sprite):
         self.rect.x = self.rect.width
         self.rect.y = self.rect.height
     
+    def update(self):
+        """Move rain down the screen."""
+        self.rect. y += self.settings.raindrop_speed

@@ -40,6 +40,7 @@ class AlienInvasion:
             self.bullets.update()
             self._update_bullets()
             self._update_aliens()
+            self._update_raindrops()
             self._update_screen() # Make the most recently drawn screen visible.
             self.clock.tick(60) # Ensures game will never render more thatn 60 FPS.
 
@@ -148,6 +149,9 @@ class AlienInvasion:
         for alien in self.aliens:
             self._create_raindrop((alien.x + alien.rect.width), alien.rect.y)
 
+    def _update_raindrops(self):
+        """Updates raindrop position."""
+        self.raindrops.update()
 
     def _update_screen(self):
          """Updated images on the screen, and flip to the new screen."""
