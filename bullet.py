@@ -9,8 +9,9 @@ class Bullet(Sprite):
         super().__init__()
         self.screen = ai_game.screen
         self.settings = ai_game.settings
-        self.color = self.settings.bullet_color
-
+        
+        self.image = pygame.image.load('images/ball_of_steel.bmp')
+        self.rect = self.image.get_rect()
         # Create a bullet rect at (0,0) and then set correct position.
         self.rect = pygame.Rect(0, 0, self.settings.bullet_width, self.settings.bullet_height)
         self.rect.midright = ai_game.ship.rect.midright
@@ -27,4 +28,4 @@ class Bullet(Sprite):
 
     def draw_bullet(self):
         """Draw the bullet to the screen"""
-        pygame.draw.rect(self.screen, self.color, self.rect)
+        self.screen.blit(self.image, self.rect)
