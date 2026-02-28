@@ -153,6 +153,10 @@ class AlienInvasion:
         """Updates raindrop position."""
         self.raindrops.update()
 
+        for rain in self.raindrops:
+            if rain.rect.y >= self.screen.get_height():
+                rain.rect.y = 0
+
     def _update_screen(self):
          """Updated images on the screen, and flip to the new screen."""
          self.screen.fill(self.settings.bg_color) # Redraw the screen during each pass through the loop
