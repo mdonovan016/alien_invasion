@@ -24,8 +24,8 @@ class AlienInvasion:
         self.ship = Ship(self)
         self.stats = GameStats(self)
         self.bullets = pygame.sprite.Group()
-        self.load_sound = pygame.mixer.music.load('music\duke-nukem---i've-got-balls-of-steel-made-with-Voicemod.mp3')
-        self.sound = pygame.mixer.Sound('music\duke-nukem---i've-got-balls-of-steel-made-with-Voicemod.mp3')
+        # self.load_sound = pygame.mixer.music.load('backgroundmusic')
+        self.sound = pygame.mixer.Sound("music/balls.mp3")
         self.aliens = pygame.sprite.Group()
         self._create_fleet()
         pygame.display.set_caption("Alien Invasion") # Puts a title on the display.
