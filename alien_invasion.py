@@ -25,6 +25,7 @@ class AlienInvasion:
         self.settings.screen_height = self.screen.get_rect().height
         self.ship = Ship(self)
         self.target = Target(self)
+        self.target_active = True
         self.stats = GameStats(self)
         self.bullets = pygame.sprite.Group()
         # self.load_sound = pygame.mixer.music.load('backgroundmusic')
@@ -80,6 +81,7 @@ class AlienInvasion:
 
             self.settings.bullet_misses = 0   # <-- add this line
  
+            self.target_active = True
 
             # Hide the mouse cursor.
             pygame.mouse.set_visible(False)
@@ -131,6 +133,13 @@ class AlienInvasion:
     def _check_bullet_target_collisions(self):
         """Respond to bullet target collisions."""
         collisions = pygame.sprite.spritecollide(self.target, self.bullets, True) # type: ignore
+        if collisions:
+            self.bullets.empty()
+            self.ship.center_ship()
+            self.settings.increase_speed()
+            pygame.mouse.set_visible(True)
+            self.target_active = False 
+            self.game_active = False
         
     def _update_bullets(self):
         """Update position of bulelts and get rid of old bullets."""
@@ -146,6 +155,7 @@ class AlienInvasion:
                     break      
         
         self._check_bullet_target_collisions()
+
     
     # def _create_alien(self, x_position, y_position):
     #         """Create an alien and place it in the row."""
@@ -217,6 +227,8 @@ class AlienInvasion:
 
     def _update_target(self):
         """Checks if the target is at an edge."""
+        if not self.target_active:
+            return
         if self.target.check_edges():
             self._change_target_direction()
         self.target.update_target_location()
@@ -248,7 +260,8 @@ class AlienInvasion:
              bullet.draw_bullet()
          self.ship.blitme()
         #  self.aliens.draw(self.screen)
-         self.target.draw_target()
+         if self.target_active:
+            self.target.draw_target()
 
          # Draw the play button if the game is inactive.
          if not self.game_active:
