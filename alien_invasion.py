@@ -35,10 +35,22 @@ class AlienInvasion:
         pygame.display.set_caption("Alien Invasion") # Puts a title on the display.
 
          # Start alien invasion in an inactive state.
+        self.play_clicked = False
         self.game_active = False
+        self.level_selected = False
         
         # Make the play button.
         self.play_button = Button(self, "Play")
+        self.easy_button = Button(self, "Easy")
+        self.medium_button = Button(self, "Medium")
+        self.hard_button = Button(self, "Hard")
+
+        self.easy_button.rect.centerx = self.medium_button.rect.centerx - 250
+        self.medium_button.rect.centery= self.medium_button.rect.centery- 250
+        self.hard_button.rect.centerx = self.medium_button.rect.centerx + 250
+        self.easy_button.msg_image_rect.centerx = self.easy_button.rect.centerx
+        self.medium_button.msg_image_rect.centery= self.medium_button.rect.centery
+        self.hard_button.msg_image_rect.centerx = self.hard_button.rect.centerx
 
 
     def run_game(self):
@@ -65,7 +77,9 @@ class AlienInvasion:
                     self._check_keyup_events(event)
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     mouse_pos = pygame.mouse.get_pos()
-                    self._check_play_button(mouse_pos)               
+                    self._check_play_button(mouse_pos)
+                    if self.play_clicked:
+                        self._check_level_button(mouse_pos)          
 
     def _start_game(self):
         """Starts a new game when called."""
@@ -78,18 +92,31 @@ class AlienInvasion:
 
             # Create a new fleet and center the ship.
             self.ship.center_ship()
-
             self.settings.bullet_misses = 0   # <-- add this line
- 
             self.target_active = True
 
             # Hide the mouse cursor.
             pygame.mouse.set_visible(False)
-   
+
     def _check_play_button(self, mouse_pos):
         """Start a new game when the player clicks Play."""
         button_clicked = self.play_button.rect.collidepoint(mouse_pos)
         if button_clicked and not self.game_active:
+            self.play_clicked = True
+
+    def _check_level_button(self, mouse_pos):
+        "After user starts a new game select level."
+        if self.easy_button.rect.collidepoint(mouse_pos):
+            self.level_selected = True
+            self.settings.alien_speed = 1.0
+            self._start_game()
+        elif self.medium_button.rect.collidepoint(mouse_pos):
+            self.level_selected = True
+            self.settings.alien_speed = 5.0
+            self._start_game()
+        elif self.hard_button.rect.collidepoint(mouse_pos):
+            self.level_selected = True
+            self.settings.alien_speed = 10.0
             self._start_game()
 
     def _check_keydown_events(self, event):
@@ -140,6 +167,8 @@ class AlienInvasion:
             pygame.mouse.set_visible(True)
             self.target_active = False 
             self.game_active = False
+            self.play_clicked = False
+            self.level_selected = False
         
     def _update_bullets(self):
         """Update position of bulelts and get rid of old bullets."""
@@ -238,6 +267,8 @@ class AlienInvasion:
             self.bullets.empty()
             self.ship.center_ship()
             self.game_active = False
+            self.play_clicked = False
+            self.level_selected = False
             pygame.mouse.set_visible(True)
             return True
 
@@ -266,6 +297,10 @@ class AlienInvasion:
          # Draw the play button if the game is inactive.
          if not self.game_active:
             self.play_button.draw_button()
+            if not self.level_selected and self.play_clicked:
+                self.easy_button.draw_button()
+                self.medium_button.draw_button()
+                self.hard_button.draw_button()
 
          pygame.display.flip() 
 
